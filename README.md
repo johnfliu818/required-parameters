@@ -23,8 +23,8 @@ required({firstName, lastName})
 ## Usage
 
 `required-parameters` will check to ensure all the parameters are not null.
-When there are null parameters, it will either return the list of null parameters,
-or throw an error. Notice ES6 object syntax is recommended for using with this package.
+Its can either be customized to throw an exception or returns the list of null parameters.
+Notice ES6 object syntax is recommended for using with this package.
 
 
 ## Example 1: Validate parameters and throw exception
@@ -37,10 +37,9 @@ function addUser(firstName, lastName, phone, email, address) {
     // ...... the rest of code
 }
 
-// if firstName is null, it will throw an error:
-// missing required fields: firstName
-// if both fields are null, it will throw:
-// missing required fields: firstName, lastName
+// if firstName is null, it will throw an error: firstName is required
+// if lastName is null, it will throw: lastName is required
+// if both fields are null, it will throw: firstName is required
 ```
 
 
@@ -77,3 +76,35 @@ function addUser(firstName, lastName, phone, email, address) {
 // if both fields are null, it will still return 'firstName'
 ```
 
+
+## Ensure
+
+`ensure` is a slightly modified version of `required-paramters`. It also checks for false value. This allows user to perform comparison validation.
+
+```js
+const ensure = required('required-parameters').ensure
+
+function addUser(firstName, lastName, age, phone, email, address) {
+    // firstName and lastName are required
+    // must be 18 years old
+    ensure({firstName, lastName, age: age >= 18})
+    // ...... the rest of code
+}
+
+// it will throw error if validation fails
+```
+
+
+## Other preconfigured settings
+
+```js
+// throws exception that lists all null fields
+const required = required('required-parameters').throwsAll
+
+// ensure has all counter-parts
+const ensure = required('required-parameters').ensureList
+const ensure = required('required-parameters').ensureFirst
+const ensure = required('required-parameters').ensureThrowsAll
+```
+
+`required-parameters` provides a customize feature that fine-tunes its behavior. Further documentation will be forthcoming on this feature.
