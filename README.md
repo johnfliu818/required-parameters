@@ -1,5 +1,5 @@
 # required-pm
-ensures all required parameters are defined
+ensures all required parameters are defined, else returns names of undefined parameters
 
 
 ## Purpose
