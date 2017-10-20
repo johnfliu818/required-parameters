@@ -1,5 +1,5 @@
 # required-pm
-ensures all required parameters are defined, else returns names of undefined parameters
+ensures all required parameters are defined. e.g. required({firstName, lastName}) => Error: lastName is required
 
 
 ## Purpose
