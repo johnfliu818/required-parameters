@@ -1,7 +1,8 @@
 const expect = require('chai').expect
-const reqthrow = require('../required').throws
-const hasnull = required.hasnull
-const reqthrows = required.throws
+const reqthrow = require('../required').throw
+const reqthrowall = require('../required').throwAll
+const reqlist = require('../required').list
+const reqfirst = require('../required').first
 
 describe('required(hash)', () => {
     let apple = 'two apples'
@@ -11,26 +12,34 @@ describe('required(hash)', () => {
     let soup
 
     it('returns correct list of null fields', () => {
-        expect(required({apple, orange, pear})).to.deep.equal([])
-        expect(required({})).to.deep.equal([])
-        expect(required({apple, orange, grape})).to.deep.equal(['grape'])
-        expect(required({pear, soup})).to.deep.equal(['soup'])
-        expect(required({grape, soup})).to.deep.equal(['grape', 'soup'])        
+        expect(reqlist({apple, orange, pear})).to.deep.equal([])
+        expect(reqlist({})).to.deep.equal([])
+        expect(reqlist({apple, orange, grape})).to.deep.equal(['grape'])
+        expect(reqlist({pear, soup})).to.deep.equal(['soup'])
+        expect(reqlist({grape, soup})).to.deep.equal(['grape', 'soup'])        
     })
 
-    it('returns correct boolean', () => {
-        expect(hasnull({apple, orange, pear})).to.equal(false)
-        expect(hasnull({})).to.equal(false)
-        expect(hasnull({apple, orange, grape})).to.equal(true)
-        expect(hasnull({pear, soup})).to.equal(true)
-        expect(hasnull({grape, soup})).to.equal(true)        
+    it('returns first null field', () => {
+        expect(reqfirst({apple, orange, pear})).to.equal(undefined)
+        expect(reqfirst({})).to.equal(undefined)
+        expect(reqfirst({apple, orange, grape})).to.equal('grape')
+        expect(reqfirst({pear, soup})).to.equal('soup')
+        expect(reqfirst({grape, soup})).to.equal('grape')        
     })
 
     it('throws exception properly', () => {
-        expect((() => { reqthrows({apple, orange, pear}) })).to.not.throw()
-        expect((() => { reqthrows({}) })).to.not.throw()
-        expect((() => { reqthrows({apple, orange, grape}) })).to.throw('grape')
-        expect((() => { reqthrows({pear, soup}) })).to.throw('soup')
-        expect((() => { reqthrows({grape, soup}) })).to.throw('grape, soup')
+        expect((() => { reqthrowall({apple, orange, pear}) })).to.not.throw()
+        expect((() => { reqthrowall({}) })).to.not.throw()
+        expect((() => { reqthrowall({apple, orange, grape}) })).to.throw('grape is required')
+        expect((() => { reqthrowall({pear, soup}) })).to.throw('soup is required')
+        expect((() => { reqthrowall({grape, soup}) })).to.throw('grape, soup are required')
+    })
+
+    it('throws exception of first item', () => {
+        expect((() => { reqthrow({apple, orange, pear}) })).to.not.throw()
+        expect((() => { reqthrow({}) })).to.not.throw()
+        expect((() => { reqthrow({apple, orange, grape}) })).to.throw('grape is required')
+        expect((() => { reqthrow({pear, soup}) })).to.throw('soup is required')
+        expect((() => { reqthrow({grape, soup}) })).to.throw('grape is required')
     })
 })
