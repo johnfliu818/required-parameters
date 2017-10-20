@@ -4,7 +4,8 @@ ensures all required parameters are defined
 
 ## Purpose
 
-`required-pm` checks all the required parameters to ensure they are not null. It identifies offending parameters `by name`.
+`required-pm` checks all the required parameters to ensure they are not null. Using ES6, it is smart enough to
+return the list of null parameters by their parameters names.
 
 Instead of this:
 ```js
@@ -17,16 +18,17 @@ function addUser(firstName, lastName, phone, email, address) {
 ```
 You can do this:
 ```js
-required({firstName, lastName})
+required({firstName, lastName})     // using ES6 to identify offending parameters by name
 ```
 
 
 ## Usage
 
-`required-pm` will identify all null parameters by name. It will then either
-return the list of these parameter names or throw an error.
-Notice ES6 object syntax is recommended for using with this package.
-
+`required-pm` comes with 4 modes of operations:
+* `throw` - throws an exception for the first null parameter (recommended usage)
+* `throwAll` - throws an exception listing all null parameters
+* `first` - returns the name of first null parameter
+* `list` - returns the list of all null parameters
 
 ## Example 1: Validate parameters and throw exception
 
