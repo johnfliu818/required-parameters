@@ -1,11 +1,12 @@
-# required-parameters
-Easily tests whether all required parameters are defined
+# required-pm
+ensures all required parameters are defined
 
 
 ## Purpose
 
-It would be nice if we can easily ensure that all required parameters are defined, instead of
-having to validate them individually, like below:
+`required-pm` checks all the required parameters to ensure they are not null. It identifies offending parameters `by name`.
+
+Instead of this:
 ```js
 function addUser(firstName, lastName, phone, email, address) {
     // firstName and lastName are required fields
@@ -14,7 +15,7 @@ function addUser(firstName, lastName, phone, email, address) {
     // ..... the rest of code
 }
 ```
-With `required-parameters` you only need to do
+You can do this:
 ```js
 required({firstName, lastName})
 ```
@@ -22,17 +23,18 @@ required({firstName, lastName})
 
 ## Usage
 
-`required-parameters` will check to ensure all the parameters are not null.
-Its can either be customized to throw an exception or returns the list of null parameters.
+`required-pm` will identify all null parameters by name. It will then either
+return the list of these parameter names or throw an error.
 Notice ES6 object syntax is recommended for using with this package.
 
 
 ## Example 1: Validate parameters and throw exception
 
 ```js
-const required = require('required-parameters').throw
+const required = require('required-pm').throw
 
 function addUser(firstName, lastName, phone, email, address) {
+    // only firstName and lastName are required
     required({firstName, lastName})
     // ...... the rest of code
 }
@@ -46,7 +48,7 @@ function addUser(firstName, lastName, phone, email, address) {
 ## Example 2: Returns all null fields
 
 ```js
-const required = require('required-parameters').list
+const required = require('required-pm').list
 
 function addUser(firstName, lastName, phone, email, address) {
     let missing = required({firstName, lastName})
@@ -63,7 +65,7 @@ function addUser(firstName, lastName, phone, email, address) {
 ## Example 3: Returns first null field
 
 ```js
-const required = require('required-parameters').first
+const required = require('required-pm').first
 
 function addUser(firstName, lastName, phone, email, address) {
     let missing = required({firstName, lastName})
@@ -79,10 +81,10 @@ function addUser(firstName, lastName, phone, email, address) {
 
 ## Ensure
 
-`ensure` is a slightly modified version of `required-paramters`. It also checks for false value. This allows user to perform comparison validation.
+`ensure` is a slightly modified version of `required-pm`. It also checks for false value. This allows user to perform comparison validation.
 
 ```js
-const ensure = required('required-parameters/ensure').throw
+const ensure = required('required-pm/ensure').throw
 
 function addUser(firstName, lastName, age, phone, email, address) {
     // firstName and lastName are required
@@ -99,10 +101,10 @@ function addUser(firstName, lastName, age, phone, email, address) {
 
 ```js
 // throws exception that lists all null fields
-const required = required('required-parameters').throwAll
+const required = required('required-pm').throwAll
 
 // ensure has all counter-parts
-const ensure = required('required-parameters/ensure').list
-const ensure = required('required-parameters/ensure').first
-const ensure = required('required-parameters/ensure').throwAll
+const ensure = required('required-pm/ensure').list
+const ensure = required('required-pm/ensure').first
+const ensure = required('required-pm/ensure').throwAll
 ```
