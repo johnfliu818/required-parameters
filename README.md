@@ -30,7 +30,7 @@ Notice ES6 object syntax is recommended for using with this package.
 ## Example 1: Validate parameters and throw exception
 
 ```js
-const required = require('required-parameters')
+const required = require('required-parameters').throw
 
 function addUser(firstName, lastName, phone, email, address) {
     required({firstName, lastName})
@@ -82,7 +82,7 @@ function addUser(firstName, lastName, phone, email, address) {
 `ensure` is a slightly modified version of `required-paramters`. It also checks for false value. This allows user to perform comparison validation.
 
 ```js
-const ensure = required('required-parameters').ensure
+const ensure = required('required-parameters/ensure').throw
 
 function addUser(firstName, lastName, age, phone, email, address) {
     // firstName and lastName are required
@@ -99,12 +99,10 @@ function addUser(firstName, lastName, age, phone, email, address) {
 
 ```js
 // throws exception that lists all null fields
-const required = required('required-parameters').throwsAll
+const required = required('required-parameters').throwAll
 
 // ensure has all counter-parts
-const ensure = required('required-parameters').ensureList
-const ensure = required('required-parameters').ensureFirst
-const ensure = required('required-parameters').ensureThrowsAll
+const ensure = required('required-parameters/ensure').list
+const ensure = required('required-parameters/ensure').first
+const ensure = required('required-parameters/ensure').throwAll
 ```
-
-`required-parameters` provides a customize feature that fine-tunes its behavior. Further documentation will be forthcoming on this feature.

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const required = require('../required')
+const reqthrow = require('../required').throws
 const hasnull = required.hasnull
 const reqthrows = required.throws
 
