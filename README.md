@@ -38,46 +38,61 @@ const required = require('required-pm').throw
 function addUser(firstName, lastName, phone, email, address) {
     // only firstName and lastName are required
     required({firstName, lastName})
-    // ...... the rest of code
+    console.log(`You have added user ${firstName} ${lastName}.`)
 }
 
-// if firstName is null, it will throw an error: firstName is required
-// if lastName is null, it will throw: lastName is required
-// if both fields are null, it will throw: firstName is required
+addUser('Tim', 'Dalton')            // successs
+addUser('Scott', null, '555-1212')  // error: lastName is required
 ```
 
 
-## Example 2: Returns all null fields
+## Example 2: Working with objects instead
+Assuming the incoming data is already in object form
+```js
+const required = require('required-pm').throw
+
+function addUser(user) {
+    // only firstName and lastName are required
+    var {firstName, lastName} = user;
+    required({firstName, lastName})
+    console.log('You have added user ' + JSON.stringify(user))
+}
+
+// user input is already collected into an object
+addUser({firstName: 'Tim', lastName: 'Dalton'})     // successs
+addUser({firstName: 'Scott', phone: '555-1212'})    // error: lastName is required
+```
+
+
+## Example 3: Returns all null fields
 
 ```js
 const required = require('required-pm').list
 
 function addUser(firstName, lastName, phone, email, address) {
     let missing = required({firstName, lastName})
-    if (missing.length > 0) { /* handle missing fields */ }
-    // ...... the rest of code
+    if (missing.length > 0) console.log("missing fields " + JSON.stringify(missing))
+    else console.log(`You have added user ${firstName} ${lastName}.`)
 }
 
-// if both fields are defined, it will return []
-// if firstName is null, it will return ['firstName']
-// if both fields are null, it will return ['firstName', 'lastName']
+addUser('Tim', 'Dalton')            // successs
+addUser(null, null, '555-1212')     // missing fields ["firstName","lastName"]
 ```
 
 
-## Example 3: Returns first null field
+## Example 4: Returns first null field
 
 ```js
 const required = require('required-pm').first
 
 function addUser(firstName, lastName, phone, email, address) {
     let missing = required({firstName, lastName})
-    if (missing) { /* handle missing fields */ }
-    // ...... the rest of code
+    if (missing) console.log("missing " + missing)
+    else console.log(`You have added user ${firstName} ${lastName}.`)
 }
 
-// if both fields are defined, it will return undefined
-// if firstName is null, it will return 'firstName'
-// if both fields are null, it will still return 'firstName'
+addUser('Tim', 'Dalton')            // successs
+addUser(null, null, '555-1212')     // missing firstName
 ```
 
 
@@ -92,10 +107,11 @@ function addUser(firstName, lastName, age, phone, email, address) {
     // firstName and lastName are required
     // must be 18 years old
     ensure({firstName, lastName, age: age >= 18})
-    // ...... the rest of code
+    console.log(`You have added user ${firstName} ${lastName} of age ${age}.`)
 }
 
-// it will throw error if validation fails
+addUser('Jim', 'Smith', 30)
+addUser('Adam', 'Kidd', 10)
 ```
 
 
