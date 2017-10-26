@@ -1,5 +1,6 @@
 # required-pm
-ensures all required parameters are defined. e.g. required({firstName, lastName}) => Error: lastName is required
+ensures all required parameters are defined. For example, if a user forgets to enter lastName,
+required({firstName, lastName}) would throw an error "lastName is required"
 
 
 ## Purpose
