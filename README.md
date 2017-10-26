@@ -121,7 +121,12 @@ addUser(null, null, '555-1212')     // throws: firstName, lastName are required
 * `required-pm` does not contain ES6 code itself, so there is no need to transpile
 it using Babel.
 
-2. Does `required-pm` support multiple modes of operation?
+2. What qualifies as valid parameter in `required-pm`?
+* A field is considered missing if its value is `undefined` or `null`. We designed it
+this way to make `required-pm` most convenient to use. We may in the future introduce
+a mode that only checks for `undefined`.
+
+3. Does `required-pm` support multiple modes of operation?
 * We are trying to keep `required-pm` as simple to use as possible, so there is
 no immediate plan to improve support of mixed mode operation. If you have a use
 case that can benefit from mixed mode operation, drop us a note at GitHub issues
