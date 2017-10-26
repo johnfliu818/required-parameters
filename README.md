@@ -10,15 +10,18 @@ return the list of null parameters by their parameters names.
 Instead of this:
 ```js
 function addUser(firstName, lastName, phone, email, address) {
-    // firstName and lastName are required fields
+    // firstName, lastName and email are required fields
     if (firstName == null) throw new Error("firstName is required")
     if (lastName == null) throw new Error("lastName is required")
+    if (email == null) throw new Error("email is required")
     // ..... the rest of code
 }
 ```
 You can do this:
 ```js
-required({firstName, lastName})     // using ES6 to identify offending parameters by name
+    // `required-pm` verifies all fields for you
+    // and is smart enough to return names of the missing field(s)
+    required({firstName, lastName, email})
 ```
 
 
@@ -30,8 +33,12 @@ required({firstName, lastName})     // using ES6 to identify offending parameter
 * `first` - returns the name of first null parameter
 * `list` - returns the list of all null parameters
 
-## Example 1: Validate parameters and throw exception
 
+# `throw` Mode
+
+validates the parameters and throws exception if null
+
+## Example 1: when user inputs come in as parameters
 ```js
 const required = require('required-pm').throw
 
@@ -42,12 +49,10 @@ function addUser(firstName, lastName, phone, email, address) {
 }
 
 addUser('Tim', 'Dalton')            // successs
-addUser('Scott', null, '555-1212')  // error: lastName is required
+addUser('Scott', null, '555-1212')  // throws: lastName is required
 ```
 
-
-## Example 2: Working with objects instead
-Assuming the incoming data is already in object form
+## Example 2: when user inputs come in as a JS object
 ```js
 const required = require('required-pm').throw
 
@@ -60,12 +65,27 @@ function addUser(user) {
 
 // user input is already collected into an object
 addUser({firstName: 'Tim', lastName: 'Dalton'})     // successs
-addUser({firstName: 'Scott', phone: '555-1212'})    // error: lastName is required
+addUser({firstName: 'Scott', phone: '555-1212'})    // throws: lastName is required
 ```
 
 
-## Example 3: Returns all null fields
+# Other modes
 
+## `first` mode example
+```js
+const required = require('required-pm').first
+
+function addUser(firstName, lastName, phone, email, address) {
+    let missing = required({firstName, lastName})
+    if (missing) console.log("missing " + missing)
+    else console.log(`You have added user ${firstName} ${lastName}.`)
+}
+
+addUser('Tim', 'Dalton')            // successs
+addUser(null, null, '555-1212')     // missing firstName
+```
+
+## `list` mode example
 ```js
 const required = require('required-pm').list
 
@@ -80,49 +100,41 @@ addUser(null, null, '555-1212')     // missing fields ["firstName","lastName"]
 ```
 
 
-## Example 4: Returns first null field
-
+## `throwAll` mode example
 ```js
-const required = require('required-pm').first
+const required = require('required-pm').throwAll
 
 function addUser(firstName, lastName, phone, email, address) {
-    let missing = required({firstName, lastName})
-    if (missing) console.log("missing " + missing)
-    else console.log(`You have added user ${firstName} ${lastName}.`)
+    // only firstName and lastName are required
+    required({firstName, lastName})
+    console.log(`You have added user ${firstName} ${lastName}.`)
 }
 
 addUser('Tim', 'Dalton')            // successs
-addUser(null, null, '555-1212')     // missing firstName
+addUser(null, null, '555-1212')     // throws: firstName, lastName are required
 ```
 
 
-## Ensure
+# FAQ
+1. Does `required-pm` contain ES6 code?
+* `required-pm` does not contain ES6 code itself, so there is no need to transpile
+it using Babel.
 
-`ensure` is a slightly modified version of `required-pm`. It also checks for false value. This allows user to perform comparison validation.
-
+2. Does `required-pm` support multiple modes of operation?
+* We are trying to keep `required-pm` as simple to use as possible, so there is
+no immediate plan to improve support of mixed mode operation. If you have a use
+case that can benefit from mixed mode operation, drop us a note at GitHub issues
+page. We'll keep the suggestions in mind when/if we design mixed mode support. For now,
+you can do this instead:
 ```js
-const ensure = required('required-pm/ensure').throw
+// don't specify which mode is used
+const required = require('required-pm')
 
-function addUser(firstName, lastName, age, phone, email, address) {
-    // firstName and lastName are required
-    // must be 18 years old
-    ensure({firstName, lastName, age: age >= 18})
-    console.log(`You have added user ${firstName} ${lastName} of age ${age}.`)
+function addUser(firstName, lastName, phone, email, address) {
+    // specify mode at usage
+    required.throw({firstName, lastName})
+    let warnings = required.list({phone, email})
+    if (warnings.length > 0) console.log('Warning: missing ' + JSON.stringify(missing))
+    console.log(`You have added user ${firstName} ${lastName}.`)
 }
-
-addUser('Jim', 'Smith', 30)
-addUser('Adam', 'Kidd', 10)
-```
-
-
-## Other preconfigured settings
-
-```js
-// throws exception that lists all null fields
-const required = required('required-pm').throwAll
-
-// ensure has all counter-parts
-const ensure = required('required-pm/ensure').list
-const ensure = required('required-pm/ensure').first
-const ensure = required('required-pm/ensure').throwAll
 ```
