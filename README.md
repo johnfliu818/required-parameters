@@ -1,146 +1,58 @@
 # required-pm
-ensures all required parameters are defined. For example, if a user forgets to enter lastName,
-required({firstName, lastName}) would throw an error "lastName is required"
+ensures all required parameters are not null, or throws a useful error like "phone is required"
 
 
 ## Purpose
 
-`required-pm` checks all the required parameters to ensure they are not null. Using ES6, it is smart enough to
-return the list of null parameters by their parameters names.
+When I am creating a sign-up form for users, I typically ask for `First Name`, `Last Name`, `email`, `phone`, `address`.
+Some of these fields are required and we would not allow the sign up to proceed until they are filled in. `required-pm`
+simplifies the error checking process and returns meaningful messages when a required field is not filled in.
 
-Instead of this:
+### Usage
 ```js
-function addUser(firstName, lastName, phone, email, address) {
+const required = require('required-pm').throw
+
+function signUp(firstName, lastName, phone, email, address) {
     // firstName, lastName and email are required fields
-    if (firstName == null) throw new Error("firstName is required")
-    if (lastName == null) throw new Error("lastName is required")
-    if (email == null) throw new Error("email is required")
+    required({firstName, lastName, email})
     // ..... the rest of code
 }
 ```
-You can do this:
+
+Just one line of code, and `required-pm` would check all these fields to ensure they are not null or undefined, and
+throws meaningful error like `firstName is required` if a field is null.
+
+
+## Customizable
+
+An optional parameter can be used to customize what require-pm checks for.
+
+E.g. checks for `undefined` only
 ```js
-    // `required-pm` verifies all fields for you
-    // and is smart enough to return names of the missing field(s)
-    required({firstName, lastName, email})
+required({firstName, lastName, email}, 'u')
 ```
 
-
-## Usage
-
-`required-pm` comes with 4 modes of operations:
-* `throw` - throws an exception for the first null parameter (recommended usage)
-* `throwAll` - throws an exception listing all null parameters
-* `first` - returns the name of first null parameter
-* `list` - returns the list of all null parameters
-
-
-# `throw` Mode
-
-validates the parameters and throws exception if null
-
-## Example 1: when user inputs come in as parameters
+checks for `undefined`, `null` and `''`
 ```js
-const required = require('required-pm').throw
-
-function addUser(firstName, lastName, phone, email, address) {
-    // only firstName and lastName are required
-    required({firstName, lastName})
-    console.log(`You have added user ${firstName} ${lastName}.`)
-}
-
-addUser('Tim', 'Dalton')            // successs
-addUser('Scott', null, '555-1212')  // throws: lastName is required
+required({firstName, lastName, email}, 'snu')
 ```
 
-## Example 2: when user inputs come in as a JS object
+checks for `undefined`, `null`, `''`, `false` and `0`
 ```js
-const required = require('required-pm').throw
-
-function addUser(user) {
-    // only firstName and lastName are required
-    var {firstName, lastName} = user;
-    required({firstName, lastName})
-    console.log('You have added user ' + JSON.stringify(user))
-}
-
-// user input is already collected into an object
-addUser({firstName: 'Tim', lastName: 'Dalton'})     // successs
-addUser({firstName: 'Scott', phone: '555-1212'})    // throws: lastName is required
+required({firstName, lastName, email}, 'snzfu')     // I was shooting for snafu :)
 ```
 
+### Modes
 
-# Other modes
-
-## `first` mode example
-```js
-const required = require('required-pm').first
-
-function addUser(firstName, lastName, phone, email, address) {
-    let missing = required({firstName, lastName})
-    if (missing) console.log("missing " + missing)
-    else console.log(`You have added user ${firstName} ${lastName}.`)
-}
-
-addUser('Tim', 'Dalton')            // successs
-addUser(null, null, '555-1212')     // missing firstName
-```
-
-## `list` mode example
+Instead of throwing errors, required-pm can return the list of empty fields instead
 ```js
 const required = require('required-pm').list
 
-function addUser(firstName, lastName, phone, email, address) {
-    let missing = required({firstName, lastName})
-    if (missing.length > 0) console.log("missing fields " + JSON.stringify(missing))
-    else console.log(`You have added user ${firstName} ${lastName}.`)
-}
-
-addUser('Tim', 'Dalton')            // successs
-addUser(null, null, '555-1212')     // missing fields ["firstName","lastName"]
-```
-
-
-## `throwAll` mode example
-```js
-const required = require('required-pm').throwAll
-
-function addUser(firstName, lastName, phone, email, address) {
-    // only firstName and lastName are required
-    required({firstName, lastName})
-    console.log(`You have added user ${firstName} ${lastName}.`)
-}
-
-addUser('Tim', 'Dalton')            // successs
-addUser(null, null, '555-1212')     // throws: firstName, lastName are required
-```
-
-
-# FAQ
-1. Does `required-pm` contain ES6 code?
-* `required-pm` does not contain ES6 code itself, so there is no need to transpile
-it using Babel.
-
-2. What qualifies as valid parameter in `required-pm`?
-* A field is considered missing if its value is `undefined` or `null`. We designed it
-this way to make `required-pm` most convenient to use. We may in the future introduce
-a mode that only checks for `undefined`.
-
-3. Does `required-pm` support multiple modes of operation?
-* We are trying to keep `required-pm` as simple to use as possible, so there is
-no immediate plan to improve support of mixed mode operation. If you have a use
-case that can benefit from mixed mode operation, drop us a note at GitHub issues
-page. We'll keep the suggestions in mind when/if we design mixed mode support. For now,
-you can do this instead:
-```js
-// don't specify which mode is used
-const required = require('required-pm')
-
-function addUser(firstName, lastName, phone, email, address) {
-    // specify mode at usage
-    required.throw({firstName, lastName})
-    let warnings = required.list({phone, email})
-    if (warnings.length > 0) console.log('Warning: missing ' + JSON.stringify(missing))
-    console.log(`You have added user ${firstName} ${lastName}.`)
+function signUp(firstName, lastName, phone, email, address) {
+    required({firstName, lastName, email})  //=> returns the list of empty fields instead of throwing an error
+    // ..... the rest of code
 }
 ```
+
+## More Documentation
+Click [here](https://github.com/johnfliu818/required-parameters/blob/master/Documentation.md) for more detailed documentation.
