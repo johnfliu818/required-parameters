@@ -4,7 +4,7 @@ const ensurethrowall = require('../ensure').throwAll
 const ensurelist = require('../ensure').list
 const ensurefirst = require('../ensure').first
 
-describe('required(hash)', () => {
+describe('ensure(hash)', () => {
     let apple = 'two apples'
     let orange = 3
     let pear = {}

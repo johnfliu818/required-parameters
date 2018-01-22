@@ -42,4 +42,17 @@ describe('required(hash)', () => {
         expect((() => { reqthrow({pear, soup}) })).to.throw('soup is required')
         expect((() => { reqthrow({grape, soup}) })).to.throw('grape is required')
     })
+
+    it('can handle options', () => {
+        expect(reqlist({apple, orange, pear}, 'snzfu')).to.deep.equal([])
+        expect(reqlist({apple, orange, grape}, 'nu')).to.deep.equal(['grape'])
+        expect(reqlist({apple, orange, grape}, 'n')).to.deep.equal(['grape'])
+        expect(reqlist({apple, orange, grape}, 'u')).to.deep.equal([])
+        expect(reqlist({grape, pear, soup})).to.deep.equal(['grape', 'soup'])
+        expect(reqlist({grape, pear, soup}, 'u')).to.deep.equal(['soup'])
+        expect(reqlist({grape, pear, soup, extra: '', f: false}, 'nu')).to.deep.equal(['grape', 'soup'])
+        expect(reqlist({grape, pear, soup, extra: '', f: false}, 'snu')).to.deep.equal(['grape', 'soup', 'extra'])
+        expect(reqlist({grape, pear, soup, extra: '', f: false}, 'snzfu')).to.deep.equal(['grape', 'soup', 'extra', 'f'])
+    })
+
 })
