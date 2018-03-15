@@ -55,4 +55,4 @@ function signUp(firstName, lastName, phone, email, address) {
 ```
 
 ## More Documentation
-Click [here](https://github.com/johnfliu818/required-parameters/blob/master/Documentation.md) for more detailed documentation.
+Click [here](https://github.com/highmountaintea/required-parameters/blob/master/Documentation.md) for more detailed documentation.

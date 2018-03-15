@@ -1,6 +1,6 @@
 {
   "name": "required-pm",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "main": "required.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johnfliu818/required-parameters.git"
+    "url": "git+https://github.com/highmountaintea/required-parameters.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/johnfliu818/required-parameters/issues"
+    "url": "https://github.com/highmountaintea/required-parameters/issues"
   },
-  "homepage": "https://github.com/johnfliu818/required-parameters#readme",
+  "homepage": "https://github.com/highmountaintea/required-parameters#readme",
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^4.0.1"
