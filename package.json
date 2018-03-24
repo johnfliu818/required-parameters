@@ -1,9 +1,13 @@
 {
   "name": "required-pm",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "",
+  "keywords": [
+    "required parameters", "null check", "ES6", "readable error", "defined", "not-null"
+  ],
   "main": "required.js",
   "scripts": {
+    "start": "required.js",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": {
