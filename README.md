@@ -1,4 +1,6 @@
 # required-pm
+[![NPM](https://nodei.co/npm/required-pm.png)](https://npmjs.org/package/required-pm)
+
 ensures all required parameters are not null, or throws a useful error like "phone is required"
 
 
