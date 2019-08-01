@@ -1,6 +1,6 @@
 {
   "name": "required-pm",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "ensures all required parameters are not null, or throws a useful error like 'phone is required'",
   "keywords": [
     "required parameters",
